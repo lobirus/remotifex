@@ -2,14 +2,13 @@ FROM node:22-alpine AS base
 
 WORKDIR /app
 
-# Install dependencies
-COPY package.json ./
-RUN npm install
+# Install dependencies (skip postinstall — nuxt prepare needs source files)
+COPY package.json package-lock.json ./
+RUN npm ci --ignore-scripts
 
-# Copy source
+# Copy source and run nuxt prepare + build
 COPY . .
-
-# Build
+RUN npm run postinstall
 RUN npm run build
 
 EXPOSE 3000
@@ -21,8 +20,8 @@ FROM node:22-alpine AS dev
 
 WORKDIR /app
 
-COPY package.json ./
-RUN npm install
+COPY package.json package-lock.json ./
+RUN npm ci --ignore-scripts
 
 EXPOSE 3000
 
