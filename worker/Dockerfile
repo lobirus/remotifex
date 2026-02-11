@@ -16,6 +16,7 @@ RUN npm install -g @anthropic-ai/claude-code
 
 # Install Python dependencies
 COPY pyproject.toml ./
+COPY app/__init__.py ./app/
 RUN pip install --no-cache-dir .
 
 # Copy application

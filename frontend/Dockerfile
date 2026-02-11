@@ -16,12 +16,7 @@ EXPOSE 3000
 CMD ["node", ".output/server/index.mjs"]
 
 # Development target
-FROM node:22-alpine AS dev
-
-WORKDIR /app
-
-COPY package.json package-lock.json ./
-RUN npm ci --ignore-scripts
+FROM base AS dev
 
 EXPOSE 3000
 
