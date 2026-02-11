@@ -28,7 +28,7 @@ confirm() {
         echo "$prompt [y/N] y (auto-accepted)"
         return 0
     fi
-    read -r -p "$prompt [y/N] " response
+    read -r -p "$prompt [y/N] " response < /dev/tty
     case "$response" in
         [yY][eE][sS]|[yY]) return 0 ;;
         *) return 1 ;;
