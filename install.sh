@@ -11,7 +11,7 @@ fi
 # Flags: -y / --yes  Auto-accept all prompts
 
 REMOTIFEX_DIR="${REMOTIFEX_DIR:-/opt/remotifex}"
-REPO_URL="https://github.com/remotifex/remotifex.git"
+REPO_URL="https://github.com/lobirus/remotifex.git"
 AUTO_YES=false
 
 # Parse flags

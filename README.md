@@ -56,7 +56,7 @@ Then open `http://your-server-ip` in your browser and complete the setup wizard.
 ### Manual Installation
 
 ```bash
-git clone https://github.com/remotifex/remotifex.git /opt/remotifex
+git clone https://github.com/lobirus/remotifex.git /opt/remotifex
 cd /opt/remotifex
 cp .env.example .env
 # Generate secrets in .env (JWT_SECRET, ENCRYPTION_KEY)
@@ -220,7 +220,7 @@ Contributions are welcome! Please:
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-For bugs and feature requests, please [open an issue](https://github.com/remotifex/remotifex/issues).
+For bugs and feature requests, please [open an issue](https://github.com/lobirus/remotifex/issues).
 
 ## Security
 
