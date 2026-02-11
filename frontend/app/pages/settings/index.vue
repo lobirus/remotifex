@@ -160,11 +160,100 @@
         </div>
       </div>
     </section>
+
+    <!-- About & Updates -->
+    <section class="card p-6 space-y-4">
+      <h2 class="text-lg font-medium text-gray-900">About & Updates</h2>
+      <p class="text-sm text-gray-500">Current version and available updates</p>
+
+      <div class="space-y-4">
+        <!-- Current version -->
+        <div class="p-3 rounded-lg bg-gray-50 border border-gray-200">
+          <p class="text-xs font-medium text-gray-500 mb-0.5">Current Version</p>
+          <p class="text-sm font-mono text-gray-900">{{ versionInfo?.current_version || '...' }}</p>
+        </div>
+
+        <!-- Check for updates -->
+        <button
+          class="btn-primary btn-sm"
+          :disabled="checkingUpdates || updateStatus?.status === 'in_progress'"
+          @click="checkForUpdates"
+        >
+          {{ checkingUpdates ? 'Checking...' : 'Check for updates' }}
+        </button>
+
+        <!-- Up to date -->
+        <div v-if="checkedAndUpToDate" class="p-3 rounded-lg bg-green-50 border border-green-200">
+          <p class="text-sm text-green-800">You're running the latest version.</p>
+        </div>
+
+        <!-- Update available -->
+        <div v-if="versionInfo?.update_available" class="p-4 rounded-lg bg-blue-50 border border-blue-200">
+          <p class="text-sm font-medium text-blue-900">
+            Update available: v{{ versionInfo.current_version }} &rarr; v{{ versionInfo.latest_version }}
+          </p>
+          <p
+            v-if="versionInfo.release_notes"
+            class="mt-2 text-xs text-blue-800 line-clamp-4 whitespace-pre-line"
+          >{{ versionInfo.release_notes }}</p>
+          <div class="mt-3 flex gap-2">
+            <button
+              class="btn-primary btn-sm"
+              :disabled="updateStatus?.status === 'in_progress'"
+              @click="triggerUpdate"
+            >
+              Update now
+            </button>
+            <a
+              v-if="versionInfo.release_url"
+              :href="versionInfo.release_url"
+              target="_blank"
+              class="btn-secondary btn-sm"
+            >View release</a>
+          </div>
+        </div>
+
+        <!-- Update in progress -->
+        <div v-if="updateStatus?.status === 'in_progress'" class="space-y-3">
+          <div class="p-4 rounded-lg bg-amber-50 border border-amber-200">
+            <p class="text-sm font-medium text-amber-900">Updating Remotifex...</p>
+            <p v-if="updateStatus.step" class="text-xs text-amber-700 mt-1">{{ formatStep(updateStatus.step) }}</p>
+            <div class="mt-2 h-1.5 bg-amber-200 rounded-full overflow-hidden">
+              <div class="h-full bg-amber-500 rounded-full animate-pulse w-3/5" />
+            </div>
+          </div>
+          <div v-if="updateLog" class="bg-gray-900 text-green-400 text-xs font-mono p-3 rounded-lg max-h-48 overflow-y-auto">
+            <pre class="whitespace-pre-wrap">{{ updateLog }}</pre>
+          </div>
+        </div>
+
+        <!-- Update completed -->
+        <div v-if="updateStatus?.status === 'completed' && updateStatus.step === 'done'" class="p-4 rounded-lg bg-green-50 border border-green-200">
+          <p class="text-sm font-medium text-green-900">Update complete!</p>
+          <p class="text-xs text-green-700 mt-1">
+            Updated to v{{ updateStatus.new_version }}. The page will reload shortly...
+          </p>
+        </div>
+
+        <!-- Update failed -->
+        <div v-if="updateStatus?.status === 'failed'" class="p-4 rounded-lg bg-red-50 border border-red-200">
+          <p class="text-sm font-medium text-red-900">Update failed</p>
+          <p v-if="updateStatus.error" class="text-xs text-red-700 mt-1">{{ updateStatus.error }}</p>
+          <p class="text-xs text-red-600 mt-1">The system has been rolled back to the previous version.</p>
+        </div>
+
+        <!-- CLI update command hint -->
+        <div class="p-3 rounded-lg bg-gray-50 border border-gray-200">
+          <p class="text-xs font-medium text-gray-500 mb-1">Update via CLI</p>
+          <code class="text-xs font-mono text-gray-700">curl -fsSL https://update.remotifex.com | sh</code>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { AppSettings, ServerInfo } from '~/types'
+import type { AppSettings, ServerInfo, VersionInfo, UpdateStatus } from '~/types'
 
 definePageMeta({ layout: 'default' })
 
@@ -179,14 +268,41 @@ const accessPort = ref<number | undefined>(undefined)
 const baseDomain = ref('')
 const sslEmail = ref('')
 
+// Version & update state
+const versionInfo = ref<VersionInfo | null>(null)
+const checkingUpdates = ref(false)
+const updateStatus = ref<UpdateStatus | null>(null)
+const updateLog = ref('')
+let pollTimer: ReturnType<typeof setInterval> | null = null
+
+const checkedAndUpToDate = computed(() =>
+  versionInfo.value?.latest_version && !versionInfo.value?.update_available,
+)
+
+const stepLabels: Record<string, string> = {
+  checking_updates: 'Checking for updates...',
+  showing_changes: 'Reviewing changes...',
+  pulling_code: 'Pulling latest code...',
+  rebuilding: 'Rebuilding containers...',
+  rolling_back: 'Rolling back...',
+  done: 'Complete',
+  up_to_date: 'Already up to date',
+}
+
+function formatStep(step: string): string {
+  return stepLabels[step] || step
+}
+
 onMounted(async () => {
   try {
-    const [settingsData, serverData] = await Promise.all([
+    const [settingsData, serverData, versionData] = await Promise.all([
       api.get<AppSettings>('/settings'),
       api.get<ServerInfo>('/settings/server-info'),
+      api.get<VersionInfo>('/settings/version'),
     ])
     settings.value = settingsData
     serverInfo.value = serverData
+    versionInfo.value = versionData
     defaultModel.value = settingsData.ai?.claude_default_model || 'sonnet'
     remotifexDomain.value = settingsData.access?.remotifex_domain || ''
     accessPort.value = settingsData.access?.port || undefined
@@ -242,4 +358,63 @@ async function updateDomain() {
     toast.error(err instanceof Error ? err.message : 'Failed to save domain settings')
   }
 }
+
+// --- Update functions ---
+
+async function checkForUpdates() {
+  checkingUpdates.value = true
+  try {
+    versionInfo.value = await api.get<VersionInfo>('/settings/version', { check_latest: 'true' })
+    if (versionInfo.value?.update_available) {
+      toast.info('Update available!')
+    } else {
+      toast.success('You are running the latest version')
+    }
+  } catch {
+    toast.error('Failed to check for updates')
+  } finally {
+    checkingUpdates.value = false
+  }
+}
+
+async function triggerUpdate() {
+  try {
+    await api.post('/settings/update')
+    toast.info('Update started...')
+    startPolling()
+  } catch (err: unknown) {
+    toast.error(err instanceof Error ? err.message : 'Failed to start update')
+  }
+}
+
+function startPolling() {
+  pollTimer = setInterval(async () => {
+    try {
+      const status = await api.get<UpdateStatus>('/settings/update/status', {
+        include_log: 'true',
+        log_offset: '0',
+      })
+      updateStatus.value = status
+      updateLog.value = status.log || ''
+
+      if (status.status === 'completed' && status.step === 'done') {
+        stopPolling()
+        setTimeout(() => window.location.reload(), 5000)
+      } else if (status.status === 'failed') {
+        stopPolling()
+      }
+    } catch {
+      // Backend may be restarting during update — keep polling
+    }
+  }, 2000)
+}
+
+function stopPolling() {
+  if (pollTimer) {
+    clearInterval(pollTimer)
+    pollTimer = null
+  }
+}
+
+onUnmounted(() => stopPolling())
 </script>

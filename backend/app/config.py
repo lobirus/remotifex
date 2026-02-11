@@ -1,6 +1,19 @@
 """Application configuration via environment variables."""
 
+from pathlib import Path
+
 from pydantic_settings import BaseSettings
+
+
+def _read_version() -> str:
+    """Read version from VERSION file (bind-mounted from repo root)."""
+    for p in (Path("/app/VERSION"), Path(__file__).resolve().parents[1] / "VERSION"):
+        if p.exists():
+            return p.read_text().strip()
+    return "0.1.0"
+
+
+APP_VERSION = _read_version()
 
 
 class Settings(BaseSettings):

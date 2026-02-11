@@ -35,3 +35,23 @@ class SetupCompleteRequest(BaseModel):
     ai_settings: AISettingsUpdate
     domain_settings: DomainSettingsUpdate | None = None
     access_settings: AccessSettingsUpdate | None = None
+
+
+class VersionInfoResponse(BaseModel):
+    current_version: str
+    latest_version: str | None = None
+    update_available: bool = False
+    release_notes: str | None = None
+    release_url: str | None = None
+
+
+class UpdateStatusResponse(BaseModel):
+    status: str  # idle | in_progress | completed | failed
+    step: str | None = None
+    current_version: str | None = None
+    new_version: str | None = None
+    started_at: str | None = None
+    completed_at: str | None = None
+    error: str | None = None
+    log: str | None = None
+    log_lines: int | None = None

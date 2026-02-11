@@ -5,6 +5,7 @@ from contextlib import asynccontextmanager
 from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.config import APP_VERSION
 from app.db.mongodb import close_db, connect_db
 from app.routers import auth, chat, files, projects, settings, websocket
 
@@ -19,7 +20,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="Remotifex API",
-    version="0.1.0",
+    version=APP_VERSION,
     description="AI-powered remote software development platform",
     lifespan=lifespan,
 )
@@ -52,4 +53,4 @@ app.include_router(websocket.router, prefix="/ws", tags=["websocket"])
 @app.get("/health")
 async def health():
     """Health check endpoint."""
-    return {"status": "ok", "version": "0.1.0"}
+    return {"status": "ok", "version": APP_VERSION}

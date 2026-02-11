@@ -149,3 +149,23 @@ export interface ServerInfo {
   remotifex_domain: string | null
   current_url: string
 }
+
+export interface VersionInfo {
+  current_version: string
+  latest_version: string | null
+  update_available: boolean
+  release_notes: string | null
+  release_url: string | null
+}
+
+export interface UpdateStatus {
+  status: 'idle' | 'in_progress' | 'completed' | 'failed'
+  step: string | null
+  current_version: string | null
+  new_version: string | null
+  started_at: string | null
+  completed_at: string | null
+  error: string | null
+  log: string | null
+  log_lines: number | null
+}

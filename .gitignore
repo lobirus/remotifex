@@ -34,6 +34,7 @@ docker-compose.override.yml
 
 # Data (runtime)
 data/
+.update/
 
 # Logs
 *.log

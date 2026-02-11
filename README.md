@@ -37,14 +37,21 @@ Install on any Linux server with Docker:
 curl -fsSL https://get.remotifex.com | sh
 ```
 
+The installer will check for dependencies (Docker, Git) and firewall rules, offering to install/configure them if missing. To auto-accept all prompts:
+
+```bash
+curl -fsSL https://get.remotifex.com | sh -s -- --yes
+```
+
 Then open `http://your-server-ip` in your browser and complete the setup wizard.
 
 ### Requirements
 
 - Linux server (Ubuntu 22.04+ recommended)
-- Docker & Docker Compose
-- Git
+- Docker & Docker Compose (installer can set this up)
+- Git (installer can set this up)
 - 2 GB RAM minimum
+- Ports 80 and 443 open (installer checks firewall)
 
 ### Manual Installation
 

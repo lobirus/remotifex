@@ -1,12 +1,17 @@
-"""Settings routes: setup status, AI config, domain config, access config."""
+"""Settings routes: setup status, AI config, domain config, access config, updates."""
 
+import json
 import logging
 import socket
+import uuid
+from datetime import datetime, timezone
+from pathlib import Path
 
 import httpx
 from fastapi import APIRouter, Depends, HTTPException
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
+from app.config import APP_VERSION
 from app.db.mongodb import get_db
 from app.dependencies import get_admin_user
 from app.models.settings import create_default_settings_doc
@@ -17,8 +22,12 @@ from app.schemas.settings import (
     ServerInfoResponse,
     SetupCompleteRequest,
     SetupStatusResponse,
+    UpdateStatusResponse,
+    VersionInfoResponse,
 )
 from app.utils.security import encrypt_value
+
+UPDATE_DIR = Path("/app/.update")
 
 logger = logging.getLogger(__name__)
 
@@ -369,3 +378,109 @@ async def update_access_settings(
     await _reload_caddy_config(updated_doc)
 
     return {"status": "ok"}
+
+
+# --- Version & Update endpoints ---
+
+
+@router.get("/version", response_model=VersionInfoResponse)
+async def get_version_info(
+    check_latest: bool = False,
+    user: dict = Depends(get_admin_user),
+):
+    """Get current version and optionally check for latest available."""
+    result = VersionInfoResponse(current_version=APP_VERSION)
+
+    if check_latest:
+        try:
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                resp = await client.get(
+                    "https://api.github.com/repos/remotifex/remotifex/releases/latest",
+                    headers={"Accept": "application/vnd.github.v3+json"},
+                )
+                if resp.status_code == 200:
+                    data = resp.json()
+                    latest = data["tag_name"].lstrip("v")
+                    result.latest_version = latest
+                    result.update_available = latest != APP_VERSION
+                    result.release_notes = data.get("body")
+                    result.release_url = data.get("html_url")
+        except Exception:
+            logger.debug("Failed to check GitHub for latest version")
+
+    return result
+
+
+@router.post("/update")
+async def trigger_update(
+    user: dict = Depends(get_admin_user),
+):
+    """Trigger a system update by writing a signal file for the host-side watcher."""
+    if not UPDATE_DIR.exists():
+        raise HTTPException(
+            status_code=503,
+            detail="Update service not configured. Run: curl -fsSL https://update.remotifex.com | sh",
+        )
+
+    # Check if an update is already in progress
+    status_file = UPDATE_DIR / "status.json"
+    if status_file.exists():
+        try:
+            status = json.loads(status_file.read_text())
+            if status.get("status") == "in_progress":
+                raise HTTPException(status_code=409, detail="Update already in progress")
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    # Clear previous status and log
+    for f in (status_file, UPDATE_DIR / "output.log"):
+        if f.exists():
+            f.unlink()
+
+    # Write trigger file
+    update_id = str(uuid.uuid4())
+    trigger = {
+        "id": update_id,
+        "requested_at": datetime.now(timezone.utc).isoformat(),
+        "requested_by": str(user.get("_id", "")),
+    }
+    (UPDATE_DIR / "trigger.json").write_text(json.dumps(trigger))
+
+    return {"status": "triggered", "update_id": update_id}
+
+
+@router.get("/update/status", response_model=UpdateStatusResponse)
+async def get_update_status(
+    include_log: bool = False,
+    log_offset: int = 0,
+    user: dict = Depends(get_admin_user),
+):
+    """Get current update status by reading the status file written by update.sh."""
+    result = UpdateStatusResponse(status="idle")
+
+    status_file = UPDATE_DIR / "status.json"
+    if status_file.exists():
+        try:
+            data = json.loads(status_file.read_text())
+            result.status = data.get("status", "idle")
+            result.step = data.get("step")
+            result.current_version = data.get("current_version")
+            result.new_version = data.get("new_version")
+            result.started_at = data.get("started_at")
+            result.completed_at = data.get("completed_at")
+            error = data.get("error")
+            result.error = error if error else None
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    if include_log:
+        log_file = UPDATE_DIR / "output.log"
+        if log_file.exists():
+            try:
+                lines = log_file.read_text().splitlines()
+                result.log = "\n".join(lines[log_offset:])
+                result.log_lines = len(lines)
+            except OSError:
+                pass
+
+    return result
