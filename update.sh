@@ -2,7 +2,7 @@
 set -e
 
 # Remotifex Update Script
-# Usage: curl -fsSL https://update.remotifex.com | sh
+# Usage: curl -fsSL https://update.remotifex.com | bash
 # Flags: -y / --yes      Auto-accept all prompts
 #        --signal         Running via UI trigger (writes status to .update/)
 
@@ -97,7 +97,7 @@ log "[..] Step 1/5: Checking installation..."
 
 if [ ! -d "$REMOTIFEX_DIR" ]; then
     log "[!!] Remotifex not found at $REMOTIFEX_DIR"
-    log "     Set REMOTIFEX_DIR or install first: curl -fsSL https://get.remotifex.com | sh"
+    log "     Set REMOTIFEX_DIR or install first: curl -fsSL https://get.remotifex.com | bash"
     write_status "failed" "check_installation" "Remotifex not found at $REMOTIFEX_DIR"
     exit 1
 fi

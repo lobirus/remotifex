@@ -419,7 +419,7 @@ async def trigger_update(
     if not UPDATE_DIR.exists():
         raise HTTPException(
             status_code=503,
-            detail="Update service not configured. Run: curl -fsSL https://update.remotifex.com | sh",
+            detail="Update service not configured. Run: curl -fsSL https://update.remotifex.com | bash",
         )
 
     # Check if an update is already in progress

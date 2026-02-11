@@ -34,13 +34,13 @@ Your code, your server, your keys. No vendor lock-in.
 Install on any Linux server with Docker:
 
 ```bash
-curl -fsSL https://get.remotifex.com | sh
+curl -fsSL https://get.remotifex.com | bash
 ```
 
 The installer will check for dependencies (Docker, Git) and firewall rules, offering to install/configure them if missing. To auto-accept all prompts:
 
 ```bash
-curl -fsSL https://get.remotifex.com | sh -s -- --yes
+curl -fsSL https://get.remotifex.com | bash -s -- --yes
 ```
 
 Then open `http://your-server-ip` in your browser and complete the setup wizard.

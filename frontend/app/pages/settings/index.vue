@@ -245,7 +245,7 @@
         <!-- CLI update command hint -->
         <div class="p-3 rounded-lg bg-gray-50 border border-gray-200">
           <p class="text-xs font-medium text-gray-500 mb-1">Update via CLI</p>
-          <code class="text-xs font-mono text-gray-700">curl -fsSL https://update.remotifex.com | sh</code>
+          <code class="text-xs font-mono text-gray-700">curl -fsSL https://update.remotifex.com | bash</code>
         </div>
       </div>
     </section>

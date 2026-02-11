@@ -1,8 +1,13 @@
 #!/bin/bash
 set -e
 
+# Re-exec with bash if running under a different shell (e.g. curl ... | sh)
+if [ -z "$BASH_VERSION" ]; then
+    exec bash "$0" "$@"
+fi
+
 # Remotifex Install Script
-# Usage: curl -fsSL https://get.remotifex.com | sh
+# Usage: curl -fsSL https://get.remotifex.com | bash
 # Flags: -y / --yes  Auto-accept all prompts
 
 REMOTIFEX_DIR="${REMOTIFEX_DIR:-/opt/remotifex}"
@@ -336,6 +341,6 @@ echo "  Domains, AI keys, and all other settings"
 echo "  are configured via the web UI."
 echo ""
 echo "  To update Remotifex:"
-echo "    curl -fsSL https://update.remotifex.com | sh"
+echo "    curl -fsSL https://update.remotifex.com | bash"
 echo "    or use the Settings page in the web UI"
 echo ""
