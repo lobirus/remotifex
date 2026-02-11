@@ -1,0 +1,17 @@
+[project]
+name = "remotifex-worker"
+version = "0.1.0"
+description = "Remotifex AI task worker"
+requires-python = ">=3.12"
+license = "AGPL-3.0-or-later"
+dependencies = [
+    "redis[hiredis]>=5.2.0",
+    "motor>=3.6.0",
+    "pydantic>=2.10.0",
+    "pydantic-settings>=2.7.0",
+    "cryptography>=44.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

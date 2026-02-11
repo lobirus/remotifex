@@ -1,0 +1,8 @@
+# Base Caddyfile for Remotifex
+# Dynamic routes for project domains are managed via Caddy Admin API
+# This file provides fallback configuration
+
+{
+	# Enable admin API for dynamic route management
+	admin 0.0.0.0:2019
+}

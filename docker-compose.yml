@@ -1,0 +1,94 @@
+services:
+  # Reverse Proxy - auto SSL
+  caddy:
+    image: lucaslorentz/caddy-docker-proxy:2.9
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    environment:
+      CADDY_INGRESS_NETWORKS: remotifex_net
+    networks:
+      - remotifex_net
+    restart: unless-stopped
+
+  # Frontend - Nuxt 3
+  frontend:
+    build: ./frontend
+    labels:
+      caddy: ":80"
+      caddy.reverse_proxy: "{{upstreams 3000}}"
+    environment:
+      NUXT_PUBLIC_API_URL: /api
+      NUXT_PUBLIC_WS_URL: /ws
+    networks:
+      - remotifex_net
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  # Backend - FastAPI
+  backend:
+    build: ./backend
+    labels:
+      caddy: ":80"
+      caddy.route.0_path: /api/*
+      caddy.route.0_reverse_proxy: "{{upstreams 8000}}"
+      caddy.route.1_path: /ws/*
+      caddy.route.1_reverse_proxy: "{{upstreams 8000}}"
+    env_file: .env
+    volumes:
+      - projects_data:/data/projects
+    networks:
+      - remotifex_net
+    depends_on:
+      - mongo
+      - redis
+    restart: unless-stopped
+
+  # AI Worker - runs Claude Code / Amp
+  worker:
+    build: ./worker
+    env_file: .env
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - projects_data:/data/projects
+    networks:
+      - remotifex_net
+    depends_on:
+      - mongo
+      - redis
+    restart: unless-stopped
+
+  # Database
+  mongo:
+    image: mongo:7
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - remotifex_net
+    restart: unless-stopped
+
+  # Queue + Pub/Sub
+  redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - remotifex_net
+    restart: unless-stopped
+
+volumes:
+  caddy_data:
+  caddy_config:
+  mongo_data:
+  redis_data:
+  projects_data:
+
+networks:
+  remotifex_net:
+    driver: bridge
