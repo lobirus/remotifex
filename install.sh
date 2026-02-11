@@ -152,10 +152,10 @@ check_firewall() {
         echo "[..] Detected active UFW firewall"
         local needs_config=false
 
-        if ! ufw status | grep -qE "80/(tcp|ALLOW)"; then
+        if ! ufw status | grep -qE "^80(/tcp)?[[:space:]].*ALLOW"; then
             needs_config=true
         fi
-        if ! ufw status | grep -qE "443/(tcp|ALLOW)"; then
+        if ! ufw status | grep -qE "^443(/tcp)?[[:space:]].*ALLOW"; then
             needs_config=true
         fi
 
