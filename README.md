@@ -11,10 +11,10 @@
 </p>
 
 <p align="center">
-  <a href="https://remotifex.com">Website</a> &middot;
+  <a href="https://remotifex.com" target="_blank">Website</a> &middot;
   <a href="#quick-start">Quick Start</a> &middot;
   <a href="#features">Features</a> &middot;
-  <a href="https://github.com/remotifex/remotifex/issues">Issues</a>
+  <a href="https://github.com/lobirus/remotifex/issues">Issues</a>
 </p>
 
 <p align="center">
