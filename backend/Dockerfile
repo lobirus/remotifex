@@ -7,11 +7,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies
+# Install Python dependencies only (copy source so pip install . works)
 COPY pyproject.toml ./
+COPY app/__init__.py ./app/
 RUN pip install --no-cache-dir .
 
-# Copy application
+# Copy full application
 COPY app/ ./app/
 
 EXPOSE 8000
