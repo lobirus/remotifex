@@ -74,16 +74,16 @@ watch(() => props.show, (isOpen) => {
           <div
             v-if="show"
             :class="[sizeClass]"
-            class="relative w-full bg-white rounded-xl shadow-xl border border-gray-200"
+            class="relative w-full bg-surface rounded-xl shadow-xl border border-edge"
             @click="onContentClick"
           >
             <!-- Header -->
-            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-              <h2 class="text-lg font-semibold text-gray-900">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-edge-subtle">
+              <h2 class="text-lg font-semibold text-heading">
                 {{ title }}
               </h2>
               <button
-                class="p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+                class="p-1 rounded-lg text-faint hover:text-muted hover:bg-surface-hover transition-colors"
                 @click="emit('close')"
               >
                 <svg
@@ -107,7 +107,7 @@ watch(() => props.show, (isOpen) => {
             <!-- Footer -->
             <div
               v-if="$slots.footer"
-              class="px-6 py-4 border-t border-gray-100 flex items-center justify-end gap-3"
+              class="px-6 py-4 border-t border-edge-subtle flex items-center justify-end gap-3"
             >
               <slot name="footer" />
             </div>

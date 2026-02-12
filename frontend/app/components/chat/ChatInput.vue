@@ -61,7 +61,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="border-t border-gray-200 bg-white p-4">
+  <div class="border-t border-edge bg-surface p-4">
     <div class="flex items-end gap-2 max-w-3xl mx-auto">
       <!-- Textarea -->
       <div class="relative flex-1">
@@ -71,7 +71,7 @@ onMounted(() => {
           :disabled="chatStore.isStreaming"
           placeholder="Ask Claude to make changes..."
           rows="1"
-          class="w-full resize-none rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 focus:outline-none disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
+          class="w-full resize-none rounded-xl border border-edge bg-surface px-4 py-2.5 text-sm text-heading placeholder-faint focus:border-brand-500 focus:ring-1 focus:ring-brand-500 focus:outline-none disabled:bg-inset disabled:text-faint disabled:cursor-not-allowed transition-colors"
           @keydown="handleKeydown"
         />
       </div>
@@ -79,7 +79,7 @@ onMounted(() => {
       <!-- Send button -->
       <button
         :disabled="!canSend"
-        class="flex items-center justify-center w-10 h-10 rounded-xl bg-brand-600 text-white hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors shrink-0"
+        class="flex items-center justify-center w-10 h-10 rounded-xl bg-brand-600 text-white hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:bg-surface-active disabled:text-faint disabled:cursor-not-allowed transition-colors shrink-0"
         @click="send"
       >
         <!-- Send arrow icon -->
@@ -99,7 +99,7 @@ onMounted(() => {
     <!-- Streaming indicator -->
     <div
       v-if="chatStore.isStreaming"
-      class="flex items-center justify-center gap-2 mt-2 text-xs text-gray-400"
+      class="flex items-center justify-center gap-2 mt-2 text-xs text-faint"
     >
       <svg
         class="w-3 h-3 animate-spin"

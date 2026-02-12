@@ -46,7 +46,7 @@ const hasToolCalls = computed(() => {
       class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-sm font-semibold"
       :class="isUser
         ? 'bg-brand-600 text-white'
-        : 'bg-gray-200 text-gray-600'"
+        : 'bg-surface-active text-muted'"
     >
       <template v-if="isUser">U</template>
       <template v-else>
@@ -73,7 +73,7 @@ const hasToolCalls = computed(() => {
         class="rounded-2xl px-4 py-3"
         :class="isUser
           ? 'bg-brand-600 text-white rounded-br-md'
-          : 'bg-white border border-gray-200 text-gray-800 rounded-bl-md shadow-sm'"
+          : 'bg-surface border border-edge text-heading rounded-bl-md shadow-sm'"
       >
         <!-- Message content as rendered markdown -->
         <div
@@ -100,7 +100,7 @@ const hasToolCalls = computed(() => {
 
       <!-- Timestamp -->
       <p
-        class="mt-1 text-xs text-gray-400 px-1"
+        class="mt-1 text-xs text-faint px-1"
         :class="isUser ? 'text-right' : 'text-left'"
       >
         {{ formattedTime }}

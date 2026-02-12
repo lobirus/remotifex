@@ -161,8 +161,8 @@ function goToDashboard() {
           <path d="M2 12l10 5 10-5" />
         </svg>
       </div>
-      <h1 class="text-2xl font-bold text-gray-900">Set up Remotifex</h1>
-      <p class="mt-1 text-sm text-gray-500">Let's get everything configured in a few quick steps</p>
+      <h1 class="text-2xl font-bold text-heading">Set up Remotifex</h1>
+      <p class="mt-1 text-sm text-muted">Let's get everything configured in a few quick steps</p>
     </div>
 
     <!-- Step Indicator -->
@@ -173,7 +173,7 @@ function goToDashboard() {
           :class="[
             step < currentStep ? 'bg-brand-600 text-white' : '',
             step === currentStep ? 'bg-brand-600 text-white ring-4 ring-brand-100' : '',
-            step > currentStep ? 'bg-gray-100 text-gray-400' : '',
+            step > currentStep ? 'bg-surface-hover text-faint' : '',
           ]"
         >
           <svg v-if="step < currentStep" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
@@ -184,7 +184,7 @@ function goToDashboard() {
         <div
           v-if="step < totalSteps"
           class="w-12 h-0.5 rounded-full transition-colors duration-300"
-          :class="step < currentStep ? 'bg-brand-600' : 'bg-gray-200'"
+          :class="step < currentStep ? 'bg-brand-600' : 'bg-edge'"
         />
       </template>
     </div>
@@ -204,14 +204,14 @@ function goToDashboard() {
 
       <!-- Step 1: Create Admin Account -->
       <div v-if="currentStep === 1" class="animate-fade-in">
-        <h2 class="text-lg font-semibold text-gray-900 mb-1">Create Admin Account</h2>
-        <p class="text-sm text-gray-500 mb-6">
+        <h2 class="text-lg font-semibold text-heading mb-1">Create Admin Account</h2>
+        <p class="text-sm text-muted mb-6">
           This will be the primary administrator account for your Remotifex instance.
         </p>
 
         <form @submit.prevent="createAdmin" class="space-y-4">
           <div>
-            <label for="admin-username" class="block text-sm font-medium text-gray-700 mb-1.5">
+            <label for="admin-username" class="block text-sm font-medium text-sub mb-1.5">
               Username
             </label>
             <input
@@ -226,7 +226,7 @@ function goToDashboard() {
           </div>
 
           <div>
-            <label for="admin-password" class="block text-sm font-medium text-gray-700 mb-1.5">
+            <label for="admin-password" class="block text-sm font-medium text-sub mb-1.5">
               Password
             </label>
             <input
@@ -241,7 +241,7 @@ function goToDashboard() {
           </div>
 
           <div>
-            <label for="admin-password-confirm" class="block text-sm font-medium text-gray-700 mb-1.5">
+            <label for="admin-password-confirm" class="block text-sm font-medium text-sub mb-1.5">
               Confirm Password
             </label>
             <input
@@ -269,14 +269,14 @@ function goToDashboard() {
 
       <!-- Step 2: Configure AI -->
       <div v-if="currentStep === 2" class="animate-fade-in">
-        <h2 class="text-lg font-semibold text-gray-900 mb-1">Configure AI</h2>
-        <p class="text-sm text-gray-500 mb-6">
+        <h2 class="text-lg font-semibold text-heading mb-1">Configure AI</h2>
+        <p class="text-sm text-muted mb-6">
           Connect your AI provider to power Remotifex's development capabilities.
         </p>
 
         <form @submit.prevent="configureAI" class="space-y-4">
           <div>
-            <label for="claude-api-key" class="block text-sm font-medium text-gray-700 mb-1.5">
+            <label for="claude-api-key" class="block text-sm font-medium text-sub mb-1.5">
               Claude API Key
             </label>
             <input
@@ -287,14 +287,14 @@ function goToDashboard() {
               class="input-field font-mono text-sm"
               :disabled="loading"
             />
-            <p class="mt-1.5 text-xs text-gray-400">
+            <p class="mt-1.5 text-xs text-faint">
               Get your API key from
               <a href="https://console.anthropic.com/" target="_blank" rel="noopener" class="text-brand-600 hover:text-brand-700 underline">console.anthropic.com</a>
             </p>
           </div>
 
           <div>
-            <label for="claude-model" class="block text-sm font-medium text-gray-700 mb-1.5">
+            <label for="claude-model" class="block text-sm font-medium text-sub mb-1.5">
               Default Model
             </label>
             <select
@@ -314,9 +314,9 @@ function goToDashboard() {
           </div>
 
           <div>
-            <label for="amp-api-key" class="block text-sm font-medium text-gray-700 mb-1.5">
+            <label for="amp-api-key" class="block text-sm font-medium text-sub mb-1.5">
               Amp API Key
-              <span class="text-gray-400 font-normal">(optional)</span>
+              <span class="text-faint font-normal">(optional)</span>
             </label>
             <input
               id="amp-api-key"
@@ -342,17 +342,17 @@ function goToDashboard() {
 
       <!-- Step 3: Access Configuration -->
       <div v-if="currentStep === 3" class="animate-fade-in">
-        <h2 class="text-lg font-semibold text-gray-900 mb-1">Access Configuration</h2>
-        <p class="text-sm text-gray-500 mb-6">
+        <h2 class="text-lg font-semibold text-heading mb-1">Access Configuration</h2>
+        <p class="text-sm text-muted mb-6">
           Configure how you'll access Remotifex. You can skip this to use the default IP-based access.
         </p>
 
         <!-- Server info -->
-        <div v-if="serverInfo?.ip" class="p-3 rounded-lg bg-gray-50 border border-gray-200 mb-5">
-          <p class="text-sm text-gray-600">
+        <div v-if="serverInfo?.ip" class="p-3 rounded-lg bg-inset border border-edge mb-5">
+          <p class="text-sm text-muted">
             Your server is accessible at
           </p>
-          <p class="text-sm font-mono font-medium text-gray-900 mt-0.5">
+          <p class="text-sm font-mono font-medium text-heading mt-0.5">
             http://{{ serverInfo.ip }}
           </p>
         </div>
@@ -363,9 +363,9 @@ function goToDashboard() {
             <input
               v-model="configureAccess"
               type="checkbox"
-              class="h-4 w-4 rounded border-gray-300 text-brand-600 focus:ring-brand-500"
+              class="h-4 w-4 rounded border-edge text-brand-600 focus:ring-brand-500"
             />
-            <span class="text-sm font-medium text-gray-700">
+            <span class="text-sm font-medium text-sub">
               Set up a custom domain for Remotifex
             </span>
           </label>
@@ -374,7 +374,7 @@ function goToDashboard() {
         <!-- Domain configuration (conditional) -->
         <div v-if="configureAccess" class="space-y-4 mb-6 animate-fade-in">
           <div>
-            <label for="remotifex-domain" class="block text-sm font-medium text-gray-700 mb-1.5">
+            <label for="remotifex-domain" class="block text-sm font-medium text-sub mb-1.5">
               Domain
             </label>
             <input
@@ -395,9 +395,9 @@ function goToDashboard() {
           </div>
 
           <div>
-            <label for="custom-port" class="block text-sm font-medium text-gray-700 mb-1.5">
+            <label for="custom-port" class="block text-sm font-medium text-sub mb-1.5">
               Port
-              <span class="text-gray-400 font-normal">(optional, default 80)</span>
+              <span class="text-faint font-normal">(optional, default 80)</span>
             </label>
             <input
               id="custom-port"
@@ -442,8 +442,8 @@ function goToDashboard() {
           </svg>
         </div>
 
-        <h2 class="text-lg font-semibold text-gray-900 mb-2">You're all set!</h2>
-        <p class="text-sm text-gray-500 mb-8 max-w-sm mx-auto">
+        <h2 class="text-lg font-semibold text-heading mb-2">You're all set!</h2>
+        <p class="text-sm text-muted mb-8 max-w-sm mx-auto">
           Remotifex is configured and ready to go. Create your first project and start building with AI.
         </p>
 
@@ -459,7 +459,7 @@ function goToDashboard() {
     </div>
 
     <!-- Footer -->
-    <p class="mt-6 text-center text-xs text-gray-400">
+    <p class="mt-6 text-center text-xs text-faint">
       Step {{ currentStep }} of {{ totalSteps }}
     </p>
   </div>

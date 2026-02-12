@@ -33,7 +33,7 @@ const statusClass = computed(() => {
     case 'error':
       return 'bg-red-100 text-red-700'
     default:
-      return 'bg-gray-100 text-gray-600'
+      return 'bg-surface-hover text-muted'
   }
 })
 
@@ -54,15 +54,15 @@ function toggle() {
 </script>
 
 <template>
-  <div class="my-2 rounded-lg border border-gray-200 bg-gray-50 overflow-hidden">
+  <div class="my-2 rounded-lg border border-edge bg-inset overflow-hidden">
     <!-- Header -->
     <button
-      class="w-full flex items-center gap-2 px-3 py-2 text-left hover:bg-gray-100 transition-colors"
+      class="w-full flex items-center gap-2 px-3 py-2 text-left hover:bg-surface-hover transition-colors"
       @click="toggle"
     >
       <!-- Chevron -->
       <svg
-        class="w-4 h-4 text-gray-400 shrink-0 transition-transform duration-200"
+        class="w-4 h-4 text-faint shrink-0 transition-transform duration-200"
         :class="{ 'rotate-90': expanded }"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 20 20"
@@ -77,7 +77,7 @@ function toggle() {
 
       <!-- Tool icon -->
       <svg
-        class="w-4 h-4 text-gray-500 shrink-0"
+        class="w-4 h-4 text-muted shrink-0"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 20 20"
         fill="currentColor"
@@ -90,7 +90,7 @@ function toggle() {
       </svg>
 
       <!-- Tool name -->
-      <span class="text-sm font-medium text-gray-700 truncate">
+      <span class="text-sm font-medium text-sub truncate">
         {{ toolCall.tool }}
       </span>
 
@@ -126,23 +126,23 @@ function toggle() {
     </button>
 
     <!-- Expanded content -->
-    <div v-if="expanded" class="border-t border-gray-200 px-3 py-2 space-y-2">
+    <div v-if="expanded" class="border-t border-edge px-3 py-2 space-y-2">
       <!-- Input -->
       <div v-if="formattedInput">
-        <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Input</p>
-        <pre class="text-xs font-mono text-gray-700 bg-white rounded border border-gray-200 p-2 overflow-x-auto whitespace-pre-wrap break-words">{{ formattedInput }}</pre>
+        <p class="text-xs font-medium text-muted uppercase tracking-wide mb-1">Input</p>
+        <pre class="text-xs font-mono text-sub bg-surface rounded border border-edge p-2 overflow-x-auto whitespace-pre-wrap break-words">{{ formattedInput }}</pre>
       </div>
 
       <!-- Output -->
       <div v-if="toolCall.output_summary">
-        <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Output</p>
-        <pre class="text-xs font-mono text-gray-700 bg-white rounded border border-gray-200 p-2 overflow-x-auto whitespace-pre-wrap break-words">{{ toolCall.output_summary }}</pre>
+        <p class="text-xs font-medium text-muted uppercase tracking-wide mb-1">Output</p>
+        <pre class="text-xs font-mono text-sub bg-surface rounded border border-edge p-2 overflow-x-auto whitespace-pre-wrap break-words">{{ toolCall.output_summary }}</pre>
       </div>
 
       <!-- Empty state -->
       <p
         v-if="!formattedInput && !toolCall.output_summary"
-        class="text-xs text-gray-400 italic"
+        class="text-xs text-faint italic"
       >
         No details available.
       </p>

@@ -29,7 +29,7 @@ const paddingClass = computed(() => {
     <!-- Header -->
     <div
       v-if="$slots.header"
-      class="px-5 py-4 border-b border-gray-100"
+      class="px-5 py-4 border-b border-edge-subtle"
     >
       <slot name="header" />
     </div>

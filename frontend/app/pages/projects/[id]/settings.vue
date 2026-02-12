@@ -1,22 +1,22 @@
 <template>
   <div class="max-w-3xl mx-auto p-6 space-y-8">
     <div>
-      <h1 class="text-2xl font-semibold text-gray-900">Project Settings</h1>
-      <p class="mt-1 text-sm text-gray-500">Configure {{ project?.name || 'project' }}</p>
+      <h1 class="text-2xl font-semibold text-heading">Project Settings</h1>
+      <p class="mt-1 text-sm text-muted">Configure {{ project?.name || 'project' }}</p>
     </div>
 
     <div v-if="project" class="space-y-6">
       <!-- General -->
       <section class="card p-6 space-y-4">
-        <h2 class="text-lg font-medium text-gray-900">General</h2>
+        <h2 class="text-lg font-medium text-heading">General</h2>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Project Name</label>
+          <label class="block text-sm font-medium text-sub mb-1">Project Name</label>
           <input v-model="projectName" type="text" class="input-field" />
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+          <label class="block text-sm font-medium text-sub mb-1">Description</label>
           <textarea v-model="projectDescription" class="input-field" rows="3" />
         </div>
 
@@ -25,11 +25,11 @@
 
       <!-- AI Configuration -->
       <section class="card p-6 space-y-4">
-        <h2 class="text-lg font-medium text-gray-900">AI Configuration</h2>
-        <p class="text-sm text-gray-500">Override global AI settings for this project</p>
+        <h2 class="text-lg font-medium text-heading">AI Configuration</h2>
+        <p class="text-sm text-muted">Override global AI settings for this project</p>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">AI Tool</label>
+          <label class="block text-sm font-medium text-sub mb-1">AI Tool</label>
           <select v-model="aiTool" class="input-field" @change="updateAiConfig">
             <option value="claude">Claude Code</option>
             <option value="amp">Amp</option>
@@ -37,7 +37,7 @@
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Model</label>
+          <label class="block text-sm font-medium text-sub mb-1">Model</label>
           <select v-model="aiModel" class="input-field" @change="updateAiConfig">
             <option value="sonnet">Claude Sonnet 4.5</option>
             <option value="opus">Claude Opus 4.6</option>
@@ -46,7 +46,7 @@
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">System Prompt (optional)</label>
+          <label class="block text-sm font-medium text-sub mb-1">System Prompt (optional)</label>
           <textarea
             v-model="systemPrompt"
             class="input-field font-mono text-xs"
@@ -63,8 +63,8 @@
 
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-sm font-medium text-gray-900">Delete Project</p>
-            <p class="text-xs text-gray-500">Permanently delete this project and all its data</p>
+            <p class="text-sm font-medium text-heading">Delete Project</p>
+            <p class="text-xs text-muted">Permanently delete this project and all its data</p>
           </div>
           <button class="btn-danger btn-sm" @click="confirmDelete">Delete Project</button>
         </div>

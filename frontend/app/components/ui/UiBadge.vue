@@ -11,7 +11,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const variantClass = computed(() => {
   const map: Record<string, string> = {
-    default: 'bg-gray-100 text-gray-700',
+    default: 'bg-surface-hover text-sub',
     success: 'bg-green-50 text-green-700 border-green-200',
     warning: 'bg-amber-50 text-amber-700 border-amber-200',
     danger: 'bg-red-50 text-red-700 border-red-200',

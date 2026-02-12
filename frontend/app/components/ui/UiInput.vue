@@ -34,7 +34,7 @@ function onInput(event: Event) {
     <label
       v-if="label"
       :for="inputId"
-      class="block text-sm font-medium text-gray-700 mb-1.5"
+      class="block text-sm font-medium text-sub mb-1.5"
     >
       {{ label }}
     </label>
@@ -48,7 +48,7 @@ function onInput(event: Event) {
       class="input-field"
       :class="{
         'border-red-500 focus:ring-red-500 focus:border-red-500': error,
-        'bg-gray-50 cursor-not-allowed text-gray-500': disabled,
+        'bg-inset cursor-not-allowed text-muted': disabled,
       }"
       @input="onInput"
     />

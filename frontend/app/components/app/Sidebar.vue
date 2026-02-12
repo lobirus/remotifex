@@ -1,13 +1,13 @@
 <template>
   <aside
     :class="[
-      'fixed inset-y-0 left-0 z-30 flex flex-col border-r border-gray-200 bg-white transition-all duration-200 ease-in-out',
+      'fixed inset-y-0 left-0 z-30 flex flex-col border-r border-edge bg-surface transition-all duration-200 ease-in-out',
       collapsed ? 'w-16' : 'w-60',
       'hidden lg:flex',
     ]"
   >
     <!-- Brand -->
-    <div class="flex h-14 items-center border-b border-gray-100 px-4">
+    <div class="flex h-14 items-center border-b border-edge-subtle px-4">
       <NuxtLink to="/" class="flex items-center gap-2.5 overflow-hidden">
         <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-brand-600 text-white">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -18,7 +18,7 @@
         </div>
         <span
           v-if="!collapsed"
-          class="text-base font-semibold text-gray-900 whitespace-nowrap"
+          class="text-base font-semibold text-heading whitespace-nowrap"
         >
           Remotifex
         </span>
@@ -37,15 +37,15 @@
             'group flex items-center gap-2.5 rounded-md px-3 py-2 text-sm font-medium transition-colors duration-150',
             collapsed ? 'justify-center' : '',
             isActive(item.to)
-              ? 'bg-brand-50 text-brand-700'
-              : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+              ? 'bg-brand-soft text-brand-500'
+              : 'text-muted hover:bg-surface-hover hover:text-heading',
           ]"
           :title="collapsed ? item.label : undefined"
         >
           <span
             :class="[
               'flex-shrink-0',
-              isActive(item.to) ? 'text-brand-600' : 'text-gray-400 group-hover:text-gray-600',
+              isActive(item.to) ? 'text-brand-500' : 'text-faint group-hover:text-muted',
             ]"
             v-html="item.icon"
           />
@@ -55,9 +55,9 @@
 
       <!-- Project nav (when inside a project) -->
       <template v-if="currentProject">
-        <div class="my-3 border-t border-gray-100" />
+        <div class="my-3 border-t border-edge-subtle" />
         <div v-if="!collapsed" class="mb-2 px-3">
-          <p class="text-[11px] font-medium uppercase tracking-wider text-gray-400">
+          <p class="text-[11px] font-medium uppercase tracking-wider text-faint">
             {{ currentProject.name }}
           </p>
         </div>
@@ -70,15 +70,15 @@
               'group flex items-center gap-2.5 rounded-md px-3 py-2 text-sm font-medium transition-colors duration-150',
               collapsed ? 'justify-center' : '',
               isActive(item.to)
-                ? 'bg-brand-50 text-brand-700'
-                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                ? 'bg-brand-soft text-brand-500'
+                : 'text-muted hover:bg-surface-hover hover:text-heading',
             ]"
             :title="collapsed ? item.label : undefined"
           >
             <span
               :class="[
                 'flex-shrink-0',
-                isActive(item.to) ? 'text-brand-600' : 'text-gray-400 group-hover:text-gray-600',
+                isActive(item.to) ? 'text-brand-500' : 'text-faint group-hover:text-muted',
               ]"
               v-html="item.icon"
             />
@@ -89,9 +89,9 @@
     </nav>
 
     <!-- Collapse toggle -->
-    <div class="border-t border-gray-100 p-2">
+    <div class="border-t border-edge-subtle p-2">
       <button
-        class="flex w-full items-center justify-center rounded-md p-2 text-gray-400 transition-colors hover:bg-gray-50 hover:text-gray-600"
+        class="flex w-full items-center justify-center rounded-md p-2 text-faint transition-colors hover:bg-surface-hover hover:text-muted"
         @click="$emit('toggle')"
       >
         <svg

@@ -1,10 +1,10 @@
 <template>
-  <header class="flex h-14 flex-shrink-0 items-center justify-between border-b border-gray-200 bg-white px-4 lg:px-6">
+  <header class="flex h-14 flex-shrink-0 items-center justify-between border-b border-edge bg-surface px-4 lg:px-6">
     <!-- Left: hamburger (mobile) + page title -->
     <div class="flex items-center gap-3">
       <!-- Mobile sidebar toggle -->
       <button
-        class="flex items-center justify-center rounded-md p-1.5 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 lg:hidden"
+        class="flex items-center justify-center rounded-md p-1.5 text-muted transition-colors hover:bg-surface-hover hover:text-sub lg:hidden"
         @click="$emit('toggle-sidebar')"
       >
         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -15,7 +15,7 @@
       </button>
 
       <!-- Page title -->
-      <h1 class="text-base font-semibold text-gray-900 truncate">
+      <h1 class="text-base font-semibold text-heading truncate">
         {{ pageTitle }}
       </h1>
     </div>
@@ -23,19 +23,19 @@
     <!-- Right: user menu -->
     <div class="relative">
       <button
-        class="flex items-center gap-2 rounded-full p-1 transition-colors hover:bg-gray-50"
+        class="flex items-center gap-2 rounded-full p-1 transition-colors hover:bg-surface-hover"
         @click="showUserMenu = !showUserMenu"
       >
         <div
-          class="flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-sm font-semibold text-brand-700"
+          class="flex h-8 w-8 items-center justify-center rounded-full bg-brand-soft text-sm font-semibold text-brand-500"
         >
           {{ userInitials }}
         </div>
-        <span class="hidden text-sm font-medium text-gray-700 sm:inline">
+        <span class="hidden text-sm font-medium text-sub sm:inline">
           {{ userName }}
         </span>
         <svg
-          class="hidden h-4 w-4 text-gray-400 sm:block"
+          class="hidden h-4 w-4 text-faint sm:block"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -58,17 +58,17 @@
       >
         <div
           v-if="showUserMenu"
-          class="absolute right-0 top-full z-50 mt-1 w-48 origin-top-right rounded-lg border border-gray-200 bg-white py-1 shadow-lg"
+          class="absolute right-0 top-full z-50 mt-1 w-48 origin-top-right rounded-lg border border-edge bg-surface py-1 shadow-lg"
         >
-          <div class="border-b border-gray-100 px-3 py-2">
-            <p class="text-sm font-medium text-gray-900">{{ userName }}</p>
-            <p class="text-xs text-gray-500">{{ userRole }}</p>
+          <div class="border-b border-edge-subtle px-3 py-2">
+            <p class="text-sm font-medium text-heading">{{ userName }}</p>
+            <p class="text-xs text-muted">{{ userRole }}</p>
           </div>
           <button
-            class="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-gray-700 transition-colors hover:bg-gray-50"
+            class="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-sub transition-colors hover:bg-surface-hover"
             @click="handleLogout"
           >
-            <svg class="h-4 w-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <svg class="h-4 w-4 text-faint" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
               <polyline points="16 17 21 12 16 7" />
               <line x1="21" y1="12" x2="9" y2="12" />

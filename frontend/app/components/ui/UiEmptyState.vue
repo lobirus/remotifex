@@ -16,7 +16,7 @@ const props = withDefaults(defineProps<Props>(), {
     <!-- Custom SVG icon via prop -->
     <div
       v-if="icon"
-      class="mb-4 text-gray-300"
+      class="mb-4 text-faint"
       v-html="icon"
     />
 
@@ -26,7 +26,7 @@ const props = withDefaults(defineProps<Props>(), {
       class="mb-4"
     >
       <svg
-        class="w-12 h-12 text-gray-300"
+        class="w-12 h-12 text-faint"
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
@@ -41,13 +41,13 @@ const props = withDefaults(defineProps<Props>(), {
       </svg>
     </div>
 
-    <h3 class="text-base font-semibold text-gray-900 mb-1">
+    <h3 class="text-base font-semibold text-heading mb-1">
       {{ title }}
     </h3>
 
     <p
       v-if="description"
-      class="text-sm text-gray-500 max-w-sm mb-6"
+      class="text-sm text-muted max-w-sm mb-6"
     >
       {{ description }}
     </p>

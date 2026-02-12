@@ -1,6 +1,7 @@
 import type { Config } from 'tailwindcss'
 
 export default {
+  darkMode: 'class',
   content: [
     './app/**/*.{vue,js,ts}',
     './components/**/*.{vue,js,ts}',
@@ -13,19 +14,37 @@ export default {
         sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
       },
       colors: {
+        // Warm coral/terracotta brand palette (matching remotifex.com)
         brand: {
-          50: '#f0f7ff',
-          100: '#e0effe',
-          200: '#bae0fd',
-          300: '#7cc8fb',
-          400: '#37aaf6',
-          500: '#0d8ee7',
-          600: '#0170c5',
-          700: '#0259a0',
-          800: '#064c84',
-          900: '#0b406e',
-          950: '#072849',
+          50:  '#fef4f0',
+          100: '#fee4db',
+          200: '#fcc8b6',
+          300: '#faa385',
+          400: '#f67a55',
+          500: '#ec5a2d',
+          600: '#d44520',
+          700: '#af381c',
+          800: '#8c301c',
+          900: '#73291b',
+          950: '#3e120b',
         },
+        // Semantic theme tokens (CSS custom properties)
+        page:         'rgb(var(--c-page) / <alpha-value>)',
+        surface: {
+          DEFAULT:    'rgb(var(--c-surface) / <alpha-value>)',
+          hover:      'rgb(var(--c-surface-hover) / <alpha-value>)',
+          active:     'rgb(var(--c-surface-active) / <alpha-value>)',
+        },
+        inset:        'rgb(var(--c-inset) / <alpha-value>)',
+        heading:      'rgb(var(--c-text) / <alpha-value>)',
+        sub:          'rgb(var(--c-text-sub) / <alpha-value>)',
+        muted:        'rgb(var(--c-text-muted) / <alpha-value>)',
+        faint:        'rgb(var(--c-text-faint) / <alpha-value>)',
+        edge: {
+          DEFAULT:    'rgb(var(--c-border) / <alpha-value>)',
+          subtle:     'rgb(var(--c-border-subtle) / <alpha-value>)',
+        },
+        'brand-soft': 'rgb(var(--c-brand-soft) / <alpha-value>)',
       },
       animation: {
         'fade-in': 'fadeIn 0.2s ease-out',

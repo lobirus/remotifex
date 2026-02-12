@@ -1,6 +1,6 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
-  devtools: { enabled: true },
+  devtools: { enabled: false },
 
   modules: [
     '@nuxtjs/tailwindcss',
@@ -26,8 +26,8 @@ export default defineNuxtConfig({
 
   colorMode: {
     classSuffix: '',
-    preference: 'light',
-    fallback: 'light',
+    preference: 'system',
+    fallback: 'dark',
   },
 
   nitro: {

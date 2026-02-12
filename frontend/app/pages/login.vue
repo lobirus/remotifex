@@ -49,8 +49,8 @@ async function handleLogin() {
           <path d="M2 12l10 5 10-5" />
         </svg>
       </div>
-      <h1 class="text-2xl font-bold text-gray-900">Welcome back</h1>
-      <p class="mt-1 text-sm text-gray-500">Sign in to your Remotifex account</p>
+      <h1 class="text-2xl font-bold text-heading">Welcome back</h1>
+      <p class="mt-1 text-sm text-muted">Sign in to your Remotifex account</p>
     </div>
 
     <!-- Login Card -->
@@ -69,7 +69,7 @@ async function handleLogin() {
 
         <!-- Username -->
         <div>
-          <label for="username" class="block text-sm font-medium text-gray-700 mb-1.5">
+          <label for="username" class="block text-sm font-medium text-sub mb-1.5">
             Username
           </label>
           <input
@@ -85,7 +85,7 @@ async function handleLogin() {
 
         <!-- Password -->
         <div>
-          <label for="password" class="block text-sm font-medium text-gray-700 mb-1.5">
+          <label for="password" class="block text-sm font-medium text-sub mb-1.5">
             Password
           </label>
           <input
@@ -113,7 +113,7 @@ async function handleLogin() {
     </div>
 
     <!-- Footer -->
-    <p class="mt-6 text-center text-xs text-gray-400">
+    <p class="mt-6 text-center text-xs text-faint">
       Remotifex — AI-powered remote development
     </p>
   </div>

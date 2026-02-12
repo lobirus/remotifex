@@ -74,29 +74,29 @@ const hasMessages = computed(() => chatStore.messages.length > 0)
 </script>
 
 <template>
-  <div class="flex flex-col h-full bg-gray-50">
+  <div class="flex flex-col h-full bg-inset">
     <!-- Top bar: session info + controls -->
-    <div class="flex items-center justify-between border-b border-gray-200 bg-white px-4 py-3">
+    <div class="flex items-center justify-between border-b border-edge bg-surface px-4 py-3">
       <div class="flex items-center gap-3 min-w-0">
-        <h2 class="text-sm font-semibold text-gray-800 truncate">
+        <h2 class="text-sm font-semibold text-heading truncate">
           {{ currentSession?.title || 'New conversation' }}
         </h2>
 
         <!-- Connection indicator -->
         <span
           class="inline-flex items-center gap-1 text-xs"
-          :class="connected ? 'text-green-600' : 'text-gray-400'"
+          :class="connected ? 'text-green-600' : 'text-faint'"
         >
           <span
             class="w-1.5 h-1.5 rounded-full"
-            :class="connected ? 'bg-green-500' : 'bg-gray-300'"
+            :class="connected ? 'bg-green-500' : 'bg-faint'"
           />
           {{ connected ? 'Connected' : 'Disconnected' }}
         </span>
       </div>
 
       <button
-        class="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-1 transition-colors"
+        class="inline-flex items-center gap-1.5 rounded-lg border border-edge bg-surface px-3 py-1.5 text-xs font-medium text-sub hover:bg-surface-hover focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-1 transition-colors"
         @click="startNewConversation"
       >
         <svg
@@ -124,9 +124,9 @@ const hasMessages = computed(() => chatStore.messages.length > 0)
         v-if="!hasMessages"
         class="flex flex-col items-center justify-center h-full text-center px-4"
       >
-        <div class="w-16 h-16 rounded-full bg-brand-100 flex items-center justify-center mb-4">
+        <div class="w-16 h-16 rounded-full bg-brand-soft flex items-center justify-center mb-4">
           <svg
-            class="w-8 h-8 text-brand-600"
+            class="w-8 h-8 text-brand-500"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="currentColor"
@@ -139,8 +139,8 @@ const hasMessages = computed(() => chatStore.messages.length > 0)
             />
           </svg>
         </div>
-        <h3 class="text-lg font-semibold text-gray-800 mb-1">Start a conversation</h3>
-        <p class="text-sm text-gray-500 max-w-sm">
+        <h3 class="text-lg font-semibold text-heading mb-1">Start a conversation</h3>
+        <p class="text-sm text-muted max-w-sm">
           Ask Claude to write code, fix bugs, refactor, or make any changes to your project.
         </p>
       </div>

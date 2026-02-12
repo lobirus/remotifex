@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-screen bg-gray-50">
+  <div class="flex h-screen bg-page">
     <!-- Sidebar -->
     <Sidebar
       :collapsed="sidebarCollapsed"

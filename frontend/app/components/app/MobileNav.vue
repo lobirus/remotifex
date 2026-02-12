@@ -1,5 +1,5 @@
 <template>
-  <nav class="fixed inset-x-0 bottom-0 z-30 border-t border-gray-200 bg-white pb-safe">
+  <nav class="fixed inset-x-0 bottom-0 z-30 border-t border-edge bg-surface pb-safe">
     <div class="flex items-stretch justify-around">
       <NuxtLink
         v-for="item in navItems"
@@ -8,8 +8,8 @@
         :class="[
           'group flex flex-1 flex-col items-center gap-0.5 py-2 text-[10px] font-medium transition-colors',
           isActive(item.to)
-            ? 'text-brand-600'
-            : 'text-gray-400 active:text-gray-600',
+            ? 'text-brand-500'
+            : 'text-faint active:text-muted',
         ]"
       >
         <!-- Active indicator dot -->

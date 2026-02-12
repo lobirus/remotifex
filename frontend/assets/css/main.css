@@ -2,12 +2,49 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ---- Theme tokens (RGB channels for Tailwind alpha support) ---- */
+:root {
+  --c-page:           250 249 249;   /* stone-50 */
+  --c-surface:        255 255 255;   /* white */
+  --c-surface-hover:  245 245 244;   /* stone-100 */
+  --c-surface-active: 231 229 228;   /* stone-200 */
+  --c-inset:          245 245 244;   /* stone-100 */
+
+  --c-text:           28 25 23;      /* stone-900 */
+  --c-text-sub:       68 64 60;      /* stone-700 */
+  --c-text-muted:     120 113 108;   /* stone-500 */
+  --c-text-faint:     168 162 158;   /* stone-400 */
+
+  --c-border:         231 229 228;   /* stone-200 */
+  --c-border-subtle:  245 245 244;   /* stone-100 */
+
+  --c-brand-soft:     254 244 240;
+}
+
+.dark {
+  --c-page:           12 12 12;
+  --c-surface:        22 22 22;
+  --c-surface-hover:  30 30 30;
+  --c-surface-active: 40 40 40;
+  --c-inset:          16 16 16;
+
+  --c-text:           245 245 244;
+  --c-text-sub:       214 211 209;
+  --c-text-muted:     168 162 158;
+  --c-text-faint:     87 83 78;
+
+  --c-border:         40 40 40;
+  --c-border-subtle:  30 30 30;
+
+  --c-brand-soft:     42 21 16;
+}
+
+/* ---- Base ---- */
 @layer base {
   body {
-    @apply font-sans text-gray-900 bg-white antialiased;
+    @apply font-sans text-heading bg-page antialiased;
   }
 
-  /* Scrollbar styling */
   ::-webkit-scrollbar {
     @apply w-1.5;
   }
@@ -17,35 +54,36 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-gray-300 rounded-full;
+    @apply bg-faint/40 rounded-full;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-400;
+    @apply bg-faint/60;
   }
 }
 
+/* ---- Components ---- */
 @layer components {
   .btn {
     @apply inline-flex items-center justify-center px-4 py-2 rounded-lg
            font-medium text-sm transition-all duration-150 ease-in-out
-           focus:outline-none focus:ring-2 focus:ring-offset-2
+           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-page
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-primary {
-    @apply btn bg-brand-600 text-white hover:bg-brand-700
-           focus:ring-brand-500 active:bg-brand-800;
+    @apply btn bg-brand-600 text-white hover:bg-brand-500
+           focus:ring-brand-500 active:bg-brand-700;
   }
 
   .btn-secondary {
-    @apply btn bg-gray-100 text-gray-700 hover:bg-gray-200
-           focus:ring-gray-400 active:bg-gray-300;
+    @apply btn bg-surface-hover text-sub hover:bg-surface-active
+           focus:ring-muted;
   }
 
   .btn-ghost {
-    @apply btn bg-transparent text-gray-600 hover:bg-gray-100
-           focus:ring-gray-400;
+    @apply btn bg-transparent text-muted hover:bg-surface-hover hover:text-sub
+           focus:ring-muted;
   }
 
   .btn-danger {
@@ -62,18 +100,18 @@
   }
 
   .input-field {
-    @apply w-full px-3 py-2 rounded-lg border border-gray-300
-           text-sm placeholder-gray-400
+    @apply w-full px-3 py-2 rounded-lg border border-edge bg-surface
+           text-sm text-heading placeholder-faint
            focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500
            transition-colors duration-150;
   }
 
   .card {
-    @apply bg-white rounded-xl border border-gray-200 shadow-sm;
+    @apply bg-surface rounded-xl border border-edge shadow-sm;
   }
 
   .card-hover {
-    @apply card hover:shadow-md hover:border-gray-300
+    @apply card hover:shadow-md hover:border-muted/30
            transition-all duration-200 cursor-pointer;
   }
 }
