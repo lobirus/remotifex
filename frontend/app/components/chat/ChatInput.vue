@@ -71,7 +71,7 @@ onMounted(() => {
           :disabled="chatStore.isStreaming"
           placeholder="Ask Claude to make changes..."
           rows="1"
-          class="w-full resize-none rounded-xl border border-edge bg-surface px-4 py-2.5 text-sm text-heading placeholder-faint focus:border-brand-500 focus:ring-1 focus:ring-brand-500 focus:outline-none disabled:bg-inset disabled:text-faint disabled:cursor-not-allowed transition-colors"
+          class="w-full resize-none rounded-xl border border-edge bg-surface px-4 py-2.5 text-sm text-heading placeholder-faint focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30 focus:outline-none disabled:bg-inset disabled:text-faint disabled:cursor-not-allowed transition-colors"
           @keydown="handleKeydown"
         />
       </div>

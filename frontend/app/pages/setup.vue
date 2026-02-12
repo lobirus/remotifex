@@ -172,7 +172,7 @@ function goToDashboard() {
           class="flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium transition-all duration-300"
           :class="[
             step < currentStep ? 'bg-brand-600 text-white' : '',
-            step === currentStep ? 'bg-brand-600 text-white ring-4 ring-brand-100' : '',
+            step === currentStep ? 'bg-brand-600 text-white ring-4 ring-brand-600/20' : '',
             step > currentStep ? 'bg-surface-hover text-faint' : '',
           ]"
         >
@@ -194,7 +194,7 @@ function goToDashboard() {
       <!-- Error Message -->
       <div
         v-if="errorMessage"
-        class="flex items-start gap-3 p-3 mb-6 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm animate-fade-in"
+        class="flex items-start gap-3 p-3 mb-6 rounded-lg bg-red-50 border border-red-200 dark:bg-red-950 dark:border-red-800 text-red-700 dark:text-red-400 text-sm animate-fade-in"
       >
         <svg class="w-5 h-5 flex-shrink-0 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
           <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
@@ -384,9 +384,9 @@ function goToDashboard() {
               placeholder="e.g. remotifex.example.com"
               class="input-field"
             />
-            <div v-if="remotifexDomain.trim() && serverInfo?.ip" class="mt-2 p-3 rounded-lg bg-blue-50 border border-blue-200">
-              <p class="text-xs font-medium text-blue-800 mb-1">DNS Configuration</p>
-              <p class="text-xs text-blue-700">
+            <div v-if="remotifexDomain.trim() && serverInfo?.ip" class="mt-2 p-3 rounded-lg bg-blue-50 border border-blue-200 dark:bg-blue-950 dark:border-blue-800">
+              <p class="text-xs font-medium text-blue-800 dark:text-blue-300 mb-1">DNS Configuration</p>
+              <p class="text-xs text-blue-700 dark:text-blue-400">
                 Point an <span class="font-mono font-semibold">A</span> record for
                 <span class="font-mono font-semibold">{{ remotifexDomain }}</span>
                 to <span class="font-mono font-semibold">{{ serverInfo.ip }}</span>
@@ -436,8 +436,8 @@ function goToDashboard() {
 
       <!-- Step 4: All Set -->
       <div v-if="currentStep === 4" class="animate-fade-in text-center py-4">
-        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 mb-5">
-          <svg class="w-8 h-8 text-green-600" viewBox="0 0 20 20" fill="currentColor">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 mb-5">
+          <svg class="w-8 h-8 text-green-600 dark:text-green-400" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
           </svg>
         </div>

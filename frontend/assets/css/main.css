@@ -100,9 +100,9 @@
   }
 
   .input-field {
-    @apply w-full px-3 py-2 rounded-lg border border-edge bg-surface
+    @apply w-full px-3 py-2.5 rounded-lg border border-edge bg-surface
            text-sm text-heading placeholder-faint
-           focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500
+           focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500/30
            transition-colors duration-150;
   }
 
