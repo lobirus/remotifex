@@ -104,10 +104,10 @@
 
   .input-field {
     @apply w-full px-3.5 py-2.5 rounded-lg
-           border border-edge bg-inset
+           border border-stone-300 dark:border-stone-600 bg-surface
            text-sm text-heading placeholder-faint
-           hover:border-muted/60
-           focus:outline-none focus:bg-surface focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10
+           hover:border-stone-400 dark:hover:border-stone-500
+           focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10
            transition-all duration-150;
   }
 
