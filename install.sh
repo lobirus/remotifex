@@ -8,16 +8,40 @@ fi
 
 # Remotifex Install Script
 # Usage: curl -fsSL https://get.remotifex.com | bash
-# Flags: -y / --yes  Auto-accept all prompts
 
 REMOTIFEX_DIR="${REMOTIFEX_DIR:-/opt/remotifex}"
 REPO_URL="https://github.com/lobirus/remotifex.git"
 AUTO_YES=false
+USE_MAIN=false
+
+show_help() {
+    echo "Remotifex Installer"
+    echo ""
+    echo "Usage: curl -fsSL https://get.remotifex.com | bash [-s -- OPTIONS]"
+    echo "       ./install.sh [OPTIONS]"
+    echo ""
+    echo "Options:"
+    echo "  -y, --yes     Auto-accept all prompts (non-interactive mode)"
+    echo "  --main        Install from the main branch instead of the latest release"
+    echo "  -h, --help    Show this help message"
+    echo ""
+    echo "Environment variables:"
+    echo "  REMOTIFEX_DIR  Installation directory (default: /opt/remotifex)"
+    echo ""
+    echo "Examples:"
+    echo "  curl -fsSL https://get.remotifex.com | bash"
+    echo "  curl -fsSL https://get.remotifex.com | bash -s -- -y"
+    echo "  curl -fsSL https://get.remotifex.com | bash -s -- --main"
+    echo "  REMOTIFEX_DIR=/srv/remotifex ./install.sh"
+    exit 0
+}
 
 # Parse flags
 for arg in "$@"; do
     case "$arg" in
         -y|--yes) AUTO_YES=true ;;
+        --main) USE_MAIN=true ;;
+        -h|--help) show_help ;;
     esac
 done
 
@@ -213,17 +237,33 @@ check_firewall() {
     fi
 }
 
-# Clone or update repository
+# Clone or update repository and checkout the target version
 setup_repo() {
     if [ -d "$REMOTIFEX_DIR" ]; then
         echo "[..] Updating existing installation..."
         cd "$REMOTIFEX_DIR"
-        git pull --ff-only
+        git fetch --tags --quiet
     else
         echo "[..] Cloning Remotifex..."
         git clone "$REPO_URL" "$REMOTIFEX_DIR"
         cd "$REMOTIFEX_DIR"
     fi
+
+    if [ "$USE_MAIN" = true ]; then
+        echo "[..] Using main branch..."
+        git checkout main --quiet 2>/dev/null
+        git pull --ff-only --quiet 2>/dev/null || true
+    else
+        # Checkout the latest release tag
+        LATEST_TAG=$(git tag -l 'v*' --sort=-version:refname | head -n1)
+        if [ -z "$LATEST_TAG" ]; then
+            echo "[!!] No release tags found — falling back to main branch"
+        else
+            echo "[..] Checking out latest release ($LATEST_TAG)..."
+            git checkout "$LATEST_TAG" --quiet 2>/dev/null
+        fi
+    fi
+
     echo "[OK] Repository ready"
 }
 
@@ -310,6 +350,12 @@ check_requirements
 echo ""
 echo "Step 2/6: Checking firewall..."
 check_firewall
+
+if [ "$USE_MAIN" = true ]; then
+    echo "[..] Installing from main branch (development)"
+else
+    echo "[..] Installing latest release"
+fi
 
 echo ""
 echo "Step 3/6: Setting up repository..."

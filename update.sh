@@ -3,20 +3,44 @@ set -e
 
 # Remotifex Update Script
 # Usage: curl -fsSL https://update.remotifex.com | bash
-# Flags: -y / --yes      Auto-accept all prompts
-#        --signal         Running via UI trigger (writes status to .update/)
 
 REMOTIFEX_DIR="${REMOTIFEX_DIR:-/opt/remotifex}"
 AUTO_YES=false
 SIGNAL_MODE=false
+USE_MAIN=false
 UPDATE_DIR=""
 ROLLBACK_COMMIT=""
+
+show_help() {
+    echo "Remotifex Updater"
+    echo ""
+    echo "Usage: curl -fsSL https://update.remotifex.com | bash [-s -- OPTIONS]"
+    echo "       ./update.sh [OPTIONS]"
+    echo ""
+    echo "Options:"
+    echo "  -y, --yes     Auto-accept all prompts (non-interactive mode)"
+    echo "  --main        Update to the latest main branch instead of the latest release"
+    echo "  --signal      Signal mode for UI-triggered updates (writes status to .update/)"
+    echo "  -h, --help    Show this help message"
+    echo ""
+    echo "Environment variables:"
+    echo "  REMOTIFEX_DIR  Installation directory (default: /opt/remotifex)"
+    echo ""
+    echo "Examples:"
+    echo "  curl -fsSL https://update.remotifex.com | bash"
+    echo "  curl -fsSL https://update.remotifex.com | bash -s -- -y"
+    echo "  curl -fsSL https://update.remotifex.com | bash -s -- --main"
+    echo "  ./update.sh --main -y"
+    exit 0
+}
 
 # Parse flags
 for arg in "$@"; do
     case "$arg" in
         -y|--yes) AUTO_YES=true ;;
         --signal) SIGNAL_MODE=true; AUTO_YES=true ;;
+        --main) USE_MAIN=true ;;
+        -h|--help) show_help ;;
     esac
 done
 
@@ -128,47 +152,75 @@ git fetch --tags --quiet 2>/dev/null || {
     exit 1
 }
 
-# Get the latest tag (sorted by version)
-LATEST_TAG=$(git tag -l 'v*' --sort=-version:refname | head -n1)
+if [ "$USE_MAIN" = true ]; then
+    # Main branch mode: compare HEAD against origin/main
+    LATEST_VERSION="main ($(git rev-parse --short origin/main 2>/dev/null))"
+    LOCAL_HEAD=$(git rev-parse HEAD 2>/dev/null)
+    REMOTE_HEAD=$(git rev-parse origin/main 2>/dev/null)
 
-if [ -z "$LATEST_TAG" ]; then
-    log "[!!] No release tags found in remote"
-    write_status "failed" "checking_updates" "No release tags found"
-    exit 1
+    if [ "$LOCAL_HEAD" = "$REMOTE_HEAD" ]; then
+        log "[OK] Already running the latest main branch (v$CURRENT_VERSION)"
+        write_status "completed" "up_to_date"
+        exit 0
+    fi
+
+    log "[OK] Update available: v$CURRENT_VERSION → $LATEST_VERSION"
+else
+    # Release mode: compare against latest tag
+    LATEST_TAG=$(git tag -l 'v*' --sort=-version:refname | head -n1)
+
+    if [ -z "$LATEST_TAG" ]; then
+        log "[!!] No release tags found in remote"
+        write_status "failed" "checking_updates" "No release tags found"
+        exit 1
+    fi
+
+    LATEST_VERSION="${LATEST_TAG#v}"
+
+    if [ "$CURRENT_VERSION" = "$LATEST_VERSION" ]; then
+        log "[OK] Already running the latest version (v$CURRENT_VERSION)"
+        write_status "completed" "up_to_date"
+        exit 0
+    fi
+
+    log "[OK] Update available: v$CURRENT_VERSION → v$LATEST_VERSION"
 fi
-
-LATEST_VERSION="${LATEST_TAG#v}"
-
-if [ "$CURRENT_VERSION" = "$LATEST_VERSION" ]; then
-    log "[OK] Already running the latest version (v$CURRENT_VERSION)"
-    write_status "completed" "up_to_date"
-    exit 0
-fi
-
-log "[OK] Update available: v$CURRENT_VERSION → v$LATEST_VERSION"
 
 # --- Step 3: Show what's new ---
 log ""
-log "[..] Step 3/5: Changes in v$LATEST_VERSION..."
 write_status "in_progress" "showing_changes"
 
-CURRENT_TAG="v$CURRENT_VERSION"
-
-# Show commit log between versions
-if git rev-parse "$CURRENT_TAG" &>/dev/null; then
-    CHANGES=$(git log --oneline "$CURRENT_TAG..$LATEST_TAG" 2>/dev/null | head -20)
+if [ "$USE_MAIN" = true ]; then
+    log "[..] Step 3/5: Changes on main since current HEAD..."
+    CHANGES=$(git log --oneline "HEAD..origin/main" 2>/dev/null | head -20)
     if [ -n "$CHANGES" ]; then
         log ""
         log "$CHANGES"
-        CHANGE_COUNT=$(git log --oneline "$CURRENT_TAG..$LATEST_TAG" 2>/dev/null | wc -l | tr -d '[:space:]')
+        CHANGE_COUNT=$(git log --oneline "HEAD..origin/main" 2>/dev/null | wc -l | tr -d '[:space:]')
         if [ "$CHANGE_COUNT" -gt 20 ]; then
             log "    ... and $((CHANGE_COUNT - 20)) more commits"
         fi
         log ""
     fi
 else
-    log "    (Cannot show changes — current version tag not found)"
-    log ""
+    log "[..] Step 3/5: Changes in v$LATEST_VERSION..."
+    CURRENT_TAG="v$CURRENT_VERSION"
+
+    if git rev-parse "$CURRENT_TAG" &>/dev/null; then
+        CHANGES=$(git log --oneline "$CURRENT_TAG..$LATEST_TAG" 2>/dev/null | head -20)
+        if [ -n "$CHANGES" ]; then
+            log ""
+            log "$CHANGES"
+            CHANGE_COUNT=$(git log --oneline "$CURRENT_TAG..$LATEST_TAG" 2>/dev/null | wc -l | tr -d '[:space:]')
+            if [ "$CHANGE_COUNT" -gt 20 ]; then
+                log "    ... and $((CHANGE_COUNT - 20)) more commits"
+            fi
+            log ""
+        fi
+    else
+        log "    (Cannot show changes — current version tag not found)"
+        log ""
+    fi
 fi
 
 if ! confirm "    Proceed with update?"; then
@@ -190,13 +242,25 @@ if ! git diff --quiet 2>/dev/null || ! git diff --cached --quiet 2>/dev/null; th
     git stash --quiet
 fi
 
-if ! git pull --ff-only 2>/dev/null; then
-    log "[!!] Fast-forward pull failed. Attempting reset to $LATEST_TAG..."
-    git checkout "$LATEST_TAG" --quiet 2>/dev/null || {
-        log "[!!] Failed to update code"
-        write_status "failed" "pulling_code" "Git pull failed"
-        exit 1
-    }
+if [ "$USE_MAIN" = true ]; then
+    git checkout main --quiet 2>/dev/null || true
+    if ! git pull --ff-only --quiet 2>/dev/null; then
+        log "[!!] Fast-forward pull failed. Attempting reset to origin/main..."
+        git reset --hard origin/main --quiet 2>/dev/null || {
+            log "[!!] Failed to update code"
+            write_status "failed" "pulling_code" "Git pull failed"
+            exit 1
+        }
+    fi
+else
+    if ! git pull --ff-only 2>/dev/null; then
+        log "[!!] Fast-forward pull failed. Attempting reset to $LATEST_TAG..."
+        git checkout "$LATEST_TAG" --quiet 2>/dev/null || {
+            log "[!!] Failed to update code"
+            write_status "failed" "pulling_code" "Git pull failed"
+            exit 1
+        }
+    fi
 fi
 
 NEW_VERSION="unknown"
