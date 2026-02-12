@@ -154,7 +154,7 @@ function goToDashboard() {
   <div class="w-full max-w-lg animate-fade-in">
     <!-- Branding -->
     <div class="text-center mb-8">
-      <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-brand-600 mb-4">
+      <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-brand-600 shadow-lg shadow-brand-600/20 mb-4">
         <svg class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 2L2 7l10 5 10-5-10-5z" />
           <path d="M2 17l10 5 10-5" />
@@ -162,28 +162,30 @@ function goToDashboard() {
         </svg>
       </div>
       <h1 class="text-2xl font-bold text-heading">Set up Remotifex</h1>
-      <p class="mt-1 text-sm text-muted">Let's get everything configured in a few quick steps</p>
+      <p class="mt-2 text-sm text-muted">Let's get everything configured in a few quick steps</p>
     </div>
 
     <!-- Step Indicator -->
-    <div class="flex items-center justify-center gap-3 mb-8">
+    <div class="flex items-center justify-center mb-8">
       <template v-for="step in totalSteps" :key="step">
+        <!-- Step circle -->
         <div
-          class="flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium transition-all duration-300"
+          class="relative flex items-center justify-center w-8 h-8 rounded-full text-xs font-semibold transition-all duration-300"
           :class="[
-            step < currentStep ? 'bg-brand-600 text-white' : '',
-            step === currentStep ? 'bg-brand-600 text-white ring-4 ring-brand-600/20' : '',
-            step > currentStep ? 'bg-surface-hover text-faint' : '',
+            step < currentStep ? 'bg-brand-600 text-white shadow-sm' : '',
+            step === currentStep ? 'bg-brand-600 text-white shadow-lg shadow-brand-600/30' : '',
+            step > currentStep ? 'bg-inset text-faint border border-edge' : '',
           ]"
         >
-          <svg v-if="step < currentStep" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+          <svg v-if="step < currentStep" class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
           </svg>
           <span v-else>{{ step }}</span>
         </div>
+        <!-- Connector line -->
         <div
           v-if="step < totalSteps"
-          class="w-12 h-0.5 rounded-full transition-colors duration-300"
+          class="w-10 h-px mx-1 transition-colors duration-300"
           :class="step < currentStep ? 'bg-brand-600' : 'bg-edge'"
         />
       </template>
@@ -260,7 +262,7 @@ function goToDashboard() {
             variant="primary"
             size="lg"
             :loading="loading"
-            class="w-full mt-2"
+            class="w-full mt-4"
           >
             Create Account & Continue
           </UiButton>
@@ -333,7 +335,7 @@ function goToDashboard() {
             variant="primary"
             size="lg"
             :loading="loading"
-            class="w-full mt-2"
+            class="w-full mt-4"
           >
             Save & Continue
           </UiButton>

@@ -96,7 +96,7 @@ const hasMessages = computed(() => chatStore.messages.length > 0)
       </div>
 
       <button
-        class="inline-flex items-center gap-1.5 rounded-lg border border-edge bg-surface px-3 py-1.5 text-xs font-medium text-sub hover:bg-surface-hover focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-1 transition-colors"
+        class="btn-secondary btn-sm"
         @click="startNewConversation"
       >
         <svg

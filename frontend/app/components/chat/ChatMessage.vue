@@ -81,7 +81,7 @@ const hasToolCalls = computed(() => {
           class="prose prose-sm max-w-none break-words"
           :class="isUser
             ? 'prose-invert prose-p:text-white prose-headings:text-white prose-strong:text-white prose-code:text-white/90 prose-a:text-white prose-a:underline'
-            : 'prose-gray'"
+            : 'prose-stone dark:prose-invert'"
           v-html="renderedContent"
         />
 

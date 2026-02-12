@@ -27,11 +27,11 @@ const statusLabel = computed(() => {
 const statusClass = computed(() => {
   switch (props.toolCall.status) {
     case 'running':
-      return 'bg-amber-100 text-amber-700'
+      return 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
     case 'completed':
-      return 'bg-green-100 text-green-700'
+      return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
     case 'error':
-      return 'bg-red-100 text-red-700'
+      return 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
     default:
       return 'bg-surface-hover text-muted'
   }

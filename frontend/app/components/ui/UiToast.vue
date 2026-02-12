@@ -10,9 +10,9 @@ const iconColors: Record<string, string> = {
 }
 
 const bgColors: Record<string, string> = {
-  success: 'bg-green-50 border-green-200',
-  error: 'bg-red-50 border-red-200',
-  info: 'bg-brand-50 border-brand-200',
+  success: 'bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800',
+  error: 'bg-red-50 border-red-200 dark:bg-red-950 dark:border-red-800',
+  info: 'bg-brand-50 border-brand-200 dark:bg-brand-950 dark:border-brand-800',
 }
 </script>
 

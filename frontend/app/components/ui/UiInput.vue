@@ -55,7 +55,7 @@ function onInput(event: Event) {
 
     <p
       v-if="error"
-      class="mt-1.5 text-sm text-red-600"
+      class="mt-1.5 text-sm text-red-600 dark:text-red-400"
     >
       {{ error }}
     </p>
